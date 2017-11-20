@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+
+         xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+
+         version="2.5">
+    <display-name>springmvc Web Application</display-name>
+    <!-- 设置根上下文配置文件 -->
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>classpath:spring/applicationContext.xml</param-value>
+    </context-param>
+    <!-- 注册ContextLoaderListener -->
+    <listener>
+        <listener-class>
+            org.springframework.web.context.ContextLoaderListener
+        </listener-class>
+    </listener>
+    
+    <!-- 编码过滤器 -->
+    <filter>
+		<filter-name>characterEncodingFilter</filter-name>
+		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>UTF-8</param-value>
+		</init-param>
+		<init-param>
+			<param-name>forceEncoding</param-name>
+			<param-value>true</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+    	<filter-name>characterEncodingFilter</filter-name>
+    	<url-pattern>/*</url-pattern>
+  	</filter-mapping>
+
+    <!-- shiro filter 的配置要在别的过滤器配置之前,保证能够拦截到所有的请求,该filter-name需要和 applicationContext-shiro.xml中的
+    org.apache.shiro.spring.web.ShiroFilterFactoryBean 的id名字一致，不然项目启动会报异常。
+    1.配置shiro的shiroFilter
+    2.DelegatingFilterProxy 实际上是Filter的一个代理对象，默认情况下，Spring 回到IOC 容器中查找和<filter-name>对应
+    的filter bean，也可以通过targetBeanName的初始化参数来配置filter bean 的id-->
+    <filter>
+        <filter-name>shiroFilter</filter-name>
+        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+        <init-param>
+            <param-name>targetFilterLifecycle</param-name>
+            <param-value>true</param-value>
+        </init-param>
+        <!-- 此配置只要和applicationContext-shiro.xml中的配置一致就可以 -->
+        <!--  <init-param>
+             <param-name>targetBeanName</param-name>
+             <param-value>shiroFilter1</param-value>
+         </init-param> -->
+    </filter>
+    <filter-mapping>
+        <filter-name>shiroFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+
+    <!-- 注册 DispatcherServlet,Spring MVC的入口，按servlet-name,
+          载入springmvc-servlet.xml-->
+    <servlet>
+        <servlet-name>springmvc</servlet-name>
+        <servlet-class>
+            org.springframework.web.servlet.DispatcherServlet
+        </servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>springmvc</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+
+    <!-- 使用SiteMesh 来完成页面的布局 -->
+    <filter>
+        <filter-name>sitemesh</filter-name>
+        <filter-class>org.sitemesh.config.ConfigurableSiteMeshFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>sitemesh</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <!-- 配置session超时时间，单位分钟 -->
+    <session-config>
+        <session-timeout>60</session-timeout>
+    </session-config>
+    <!-- 默认首页 -->
+    <welcome-file-list>
+        <welcome-file>/index.jsp</welcome-file>
+    </welcome-file-list>
+
+    <!-- 异常错误调转到相应页面-->
+    <error-page>
+        <error-code>404</error-code>
+        <location>/WEB-INF/views/errors/404.jsp</location>
+    </error-page>
+    
+</web-app>

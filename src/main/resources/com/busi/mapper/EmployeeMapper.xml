@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.busi.mapper.EmployeeMapper" >
+  <resultMap id="BaseResultMap" type="com.busi.domain.Employee" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="gender" property="gender" jdbcType="CHAR" />
+    <result column="nation" property="nation" jdbcType="VARCHAR" />
+    <result column="idcardno" property="idcardno" jdbcType="VARCHAR" />
+    <result column="birthday" property="birthday" jdbcType="DATE" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="tel" property="tel" jdbcType="VARCHAR" />
+    <result column="state" property="state" jdbcType="CHAR" />
+    <result column="orgid" property="orgid" jdbcType="BIGINT" />
+    <result column="orgname" property="orgname" jdbcType="VARCHAR" />
+    <result column="degree" property="degree" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, name, gender, nation, idcardno, birthday, address, tel, state, orgid, orgname, 
+    degree
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.busi.domain.EmployeeExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from employee
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from employee
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from employee
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.busi.domain.EmployeeExample" >
+    delete from employee
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.busi.domain.Employee" >
+    insert into employee (id, name, gender, 
+      nation, idcardno, birthday, 
+      address, tel, state, orgid, 
+      orgname, degree)
+    values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{gender,jdbcType=CHAR}, 
+      #{nation,jdbcType=VARCHAR}, #{idcardno,jdbcType=VARCHAR}, #{birthday,jdbcType=DATE}, 
+      #{address,jdbcType=VARCHAR}, #{tel,jdbcType=VARCHAR}, #{state,jdbcType=CHAR}, #{orgid,jdbcType=BIGINT}, 
+      #{orgname,jdbcType=VARCHAR}, #{degree,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.busi.domain.Employee" >
+    insert into employee
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="gender != null" >
+        gender,
+      </if>
+      <if test="nation != null" >
+        nation,
+      </if>
+      <if test="idcardno != null" >
+        idcardno,
+      </if>
+      <if test="birthday != null" >
+        birthday,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+      <if test="tel != null" >
+        tel,
+      </if>
+      <if test="state != null" >
+        state,
+      </if>
+      <if test="orgid != null" >
+        orgid,
+      </if>
+      <if test="orgname != null" >
+        orgname,
+      </if>
+      <if test="degree != null" >
+        degree,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="gender != null" >
+        #{gender,jdbcType=CHAR},
+      </if>
+      <if test="nation != null" >
+        #{nation,jdbcType=VARCHAR},
+      </if>
+      <if test="idcardno != null" >
+        #{idcardno,jdbcType=VARCHAR},
+      </if>
+      <if test="birthday != null" >
+        #{birthday,jdbcType=DATE},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="tel != null" >
+        #{tel,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=CHAR},
+      </if>
+      <if test="orgid != null" >
+        #{orgid,jdbcType=BIGINT},
+      </if>
+      <if test="orgname != null" >
+        #{orgname,jdbcType=VARCHAR},
+      </if>
+      <if test="degree != null" >
+        #{degree,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.busi.domain.EmployeeExample" resultType="java.lang.Integer" >
+    select count(*) from employee
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update employee
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.name != null" >
+        name = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.gender != null" >
+        gender = #{record.gender,jdbcType=CHAR},
+      </if>
+      <if test="record.nation != null" >
+        nation = #{record.nation,jdbcType=VARCHAR},
+      </if>
+      <if test="record.idcardno != null" >
+        idcardno = #{record.idcardno,jdbcType=VARCHAR},
+      </if>
+      <if test="record.birthday != null" >
+        birthday = #{record.birthday,jdbcType=DATE},
+      </if>
+      <if test="record.address != null" >
+        address = #{record.address,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tel != null" >
+        tel = #{record.tel,jdbcType=VARCHAR},
+      </if>
+      <if test="record.state != null" >
+        state = #{record.state,jdbcType=CHAR},
+      </if>
+      <if test="record.orgid != null" >
+        orgid = #{record.orgid,jdbcType=BIGINT},
+      </if>
+      <if test="record.orgname != null" >
+        orgname = #{record.orgname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.degree != null" >
+        degree = #{record.degree,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update employee
+    set id = #{record.id,jdbcType=BIGINT},
+      name = #{record.name,jdbcType=VARCHAR},
+      gender = #{record.gender,jdbcType=CHAR},
+      nation = #{record.nation,jdbcType=VARCHAR},
+      idcardno = #{record.idcardno,jdbcType=VARCHAR},
+      birthday = #{record.birthday,jdbcType=DATE},
+      address = #{record.address,jdbcType=VARCHAR},
+      tel = #{record.tel,jdbcType=VARCHAR},
+      state = #{record.state,jdbcType=CHAR},
+      orgid = #{record.orgid,jdbcType=BIGINT},
+      orgname = #{record.orgname,jdbcType=VARCHAR},
+      degree = #{record.degree,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.busi.domain.Employee" >
+    update employee
+    <set >
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="gender != null" >
+        gender = #{gender,jdbcType=CHAR},
+      </if>
+      <if test="nation != null" >
+        nation = #{nation,jdbcType=VARCHAR},
+      </if>
+      <if test="idcardno != null" >
+        idcardno = #{idcardno,jdbcType=VARCHAR},
+      </if>
+      <if test="birthday != null" >
+        birthday = #{birthday,jdbcType=DATE},
+      </if>
+      <if test="address != null" >
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="tel != null" >
+        tel = #{tel,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null" >
+        state = #{state,jdbcType=CHAR},
+      </if>
+      <if test="orgid != null" >
+        orgid = #{orgid,jdbcType=BIGINT},
+      </if>
+      <if test="orgname != null" >
+        orgname = #{orgname,jdbcType=VARCHAR},
+      </if>
+      <if test="degree != null" >
+        degree = #{degree,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.busi.domain.Employee" >
+    update employee
+    set name = #{name,jdbcType=VARCHAR},
+      gender = #{gender,jdbcType=CHAR},
+      nation = #{nation,jdbcType=VARCHAR},
+      idcardno = #{idcardno,jdbcType=VARCHAR},
+      birthday = #{birthday,jdbcType=DATE},
+      address = #{address,jdbcType=VARCHAR},
+      tel = #{tel,jdbcType=VARCHAR},
+      state = #{state,jdbcType=CHAR},
+      orgid = #{orgid,jdbcType=BIGINT},
+      orgname = #{orgname,jdbcType=VARCHAR},
+      degree = #{degree,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <!-- @LZ_TAG_ID: SQL_CUSTOM BEGIN -->
+
+  <!-- @LZ_TAG_ID: SQL_CUSTOM END -->
+</mapper>

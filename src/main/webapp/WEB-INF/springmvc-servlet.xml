@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans   
+        http://www.springframework.org/schema/beans/spring-beans.xsd   
+        http://www.springframework.org/schema/context   
+        http://www.springframework.org/schema/context/spring-context.xsd 
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd  
+        http://www.springframework.org/schema/mvc   
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+	<!-- 使用注解扫描bean位置 -->
+	<context:annotation-config />
+	
+	<!-- aop启用放在这里，才能使spring mvc的aop起作用，也就是控制器层（Controller）的aop ，true标识强制使用CGLIB的代理-->
+	<aop:aspectj-autoproxy proxy-target-class="true"/>
+
+	<context:component-scan base-package="com" >
+ 		 <!-- SpringMVC容器配置，让其只包括@Controller的Bean -->
+ 		 <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller" />
+<!--  		 <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Service" /> 
+ -->	</context:component-scan>
+
+	<!-- 解決响应中文乱码问题(目前这种方式有问题)，
+	也可以在@RequestMapping(value = "/test2",produces = "application/json; charset=utf-8"),此种方法只能用于一个方法上 -->
+	<mvc:annotation-driven ><!-- 启用SpringMVC的注解功能 -->
+		<mvc:message-converters register-defaults="true">
+			<bean id="stringHttpMessageConverter" class="org.springframework.http.converter.StringHttpMessageConverter">
+				<constructor-arg value="UTF-8" index="0"/>
+			</bean>
+		</mvc:message-converters>
+	</mvc:annotation-driven>
+
+	<!-- 以下方式是为了解决请求js，css等静态资源时，控制层没有对应的url返回错误的问题，以下使用方式有问题 -->
+	<mvc:resources location="/static/img/" mapping="/static/img/**" />
+	<mvc:resources location="/static/js/" mapping="/static/js/**" />
+	<mvc:resources location="/static/css/" mapping="/static/css/**" />
+	<mvc:resources location="/static/fonts/" mapping="/static/fonts/**" />
+
+	<!-- 对模型视图名称的解析，即在模型视图名称添加前后缀 -->
+	<bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="viewClass"
+			value="org.springframework.web.servlet.view.JstlView" />
+		<property name="prefix" value="/WEB-INF/views" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+	
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="maxUploadSize" value="-1" />
+	</bean> 
+	
+	<!-- 全局异常配置 start -->  
+     <bean id="exceptionResolver" class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+         <property name="exceptionMappings">  
+             <props>
+             	 <!-- 用户无权限访问时，后台不报错，并重定向到403页面 -->
+				 <prop key="org.apache.shiro.authz.UnauthorizedException">/errors/403</prop>
+                 <prop key="java.lang.Throwable">/errors/500</prop>
+             </props>  
+         </property>  
+         <property name="statusCodes">  
+             <props>  
+                 <prop key="500">500</prop>  
+                 <prop key="404">404</prop>
+                 <prop key="403">403</prop>  
+             </props>  
+         </property>  
+	</bean>
+	<!-- 全局异常配置 end --> 
+	
+	<!-- 开启Shiro的注解(如@RequiresRoles,@RequiresPermissions),需借助SpringAOP扫描使用Shiro注解的类,并在必要时进行安全逻辑验证  
+    	 配置以下两个bean即可实现此功能）
+    	 Enable Shiro Annotations for Spring-configured beans. Only run after   
+        the lifecycleBeanProcessor has run 
+		 支持 Shiro对Controller的方法级AOP安全控制(权限)begin
+		 该配置需要放在spring mvc中才能 使用shiro权限注解-->
+	<bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"
+		depends-on="lifecycleBeanPostProcessor" >
+		 <property name="proxyTargetClass" value="true" />  	
+	</bean>
+	<bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+		<property name="securityManager" ref="securityManager" />
+	</bean> 
+</beans>       

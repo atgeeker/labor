@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:context="http://www.springframework.org/schema/context" 
+	xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+       http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd">
+	<!-- 使用注解扫描bean位置 -->
+	<context:annotation-config />
+	<context:component-scan base-package="com">
+		<!-- Spring容器配置，排除所有@Controller的Bean -->
+		<context:exclude-filter type="annotation"
+			expression="org.springframework.stereotype.Controller" />
+	</context:component-scan>
+
+	<!-- spring的 启用Aspectj自动代理 ，注意和spring mvc层的日志记录的aop-->
+	<aop:aspectj-autoproxy proxy-target-class="true"/>
+
+	<!-- 加载配置文件 -->
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath:config/jdbc.properties</value>
+				<value>classpath:config/config.properties</value>
+			</list>
+		</property>
+	</bean>
+
+	<!-- 配置数据源 -->
+	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource"
+		init-method="init" destroy-method="close">
+		<!-- 基本属性 url、user、password -->
+		<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.userName}" />
+		<property name="password" value="${jdbc.password}" />
+
+		<!-- 配置初始化大小、最小、最大 -->
+		<property name="initialSize" value="1" />
+		<property name="minIdle" value="1" />
+		<property name="maxActive" value="20" />
+
+		<!-- 配置获取连接等待超时的时间 -->
+		<property name="maxWait" value="60000" />
+
+		<!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+		<property name="timeBetweenEvictionRunsMillis" value="60000" />
+
+		<!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+		<property name="minEvictableIdleTimeMillis" value="300000" />
+
+		<property name="validationQuery" value="SELECT 'x'" />
+		<property name="testWhileIdle" value="true" />
+		<property name="testOnBorrow" value="false" />
+		<property name="testOnReturn" value="false" />
+
+		<!-- 打开PSCache，并且指定每个连接上PSCache的大小 -->
+		<property name="poolPreparedStatements" value="false" />
+		<property name="maxPoolPreparedStatementPerConnectionSize"
+			value="20" />
+		<property name="logAbandoned" value="true" />
+		<!-- 配置监控统计拦截的filters -->
+		<property name="filters" value="stat" />
+	</bean>
+
+	<!-- mybatis 配置 ,使用SqlSessionTemplate 线程安全的 -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="mapperLocations" value="classpath*:com/busi/mapper/*.xml" />
+		<!-- 配置PageHelper分页插件 -->
+		<property name="configLocation" value="classpath:config/mybatis-config.xml" />
+	</bean>
+	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg index="0" ref="sqlSessionFactory"></constructor-arg>
+	</bean>
+	<!-- 可以理解为将mapper接口实例化 -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.busi.mapper" />
+	</bean>
+
+	<!--spring 事务配置 -->
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
+	<!-- 声明使用注解式事务，这里配置了之后@Transactional才能起作用 -->
+	<tx:annotation-driven transaction-manager="transactionManager" />
+
+	<!-- 加载shiro与spring集成的配置文件 -->
+	<import resource="classpath:spring/applicationContext-shiro.xml" />
+
+
+	<!-- 获取spring应用上下文 -->
+	<bean class="com.busi.util.SpringContextUtil" scope="singleton"></bean>
+
+	 <!-- spring 异步处理，在方法上使用注解@Async-->
+    <task:executor id="myExecutor" pool-size="10" />
+	<!-- 定时任务-->
+    <task:scheduler id="scheduler" pool-size="10"/>
+    <task:annotation-driven executor="myExecutor" scheduler="scheduler"/>
+
+</beans>       

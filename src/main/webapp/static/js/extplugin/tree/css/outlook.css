@@ -1,0 +1,21 @@
+.sidebar .ztree * {font-size: 10pt;font-family:"Microsoft Yahei",Verdana,Simsun,"Segoe UI Web Light","Segoe UI Light","Segoe UI Web Regular","Segoe UI","Segoe UI Symbol","Helvetica Neue",Arial}
+.sidebar .ztree li ul{ margin:0; padding:0}
+.sidebar .ztree li {line-height:30px; padding:0}
+.sidebar .ztree li a {width:200px;height:30px;padding-top: 0px;}
+.sidebar .ztree li a:hover {text-decoration:none; background-color: #E7E7E7;}
+.sidebar .ztree li a span.button.switch {visibility:hidden}
+.sidebar .ztree.showIcon li a span.button.switch {visibility:visible}
+.sidebar .ztree li a.curSelectedNode {background-color:#D4D4D4;border:0;height:30px;}
+.sidebar .ztree li span {line-height:30px;}
+.sidebar .ztree li span.button {margin-top: -7px;}
+.sidebar .ztree li span.button.switch {width: 16px;height: 16px;}
+
+.sidebar .ztree li a.level0 span {font-size: 130%;font-weight: bold;}
+.sidebar .ztree li span.button {background-image:url("./img/left_menuForOutLook.png"); *background-image:url("./img/left_menuForOutLook.gif")}
+.sidebar .ztree li span.button.switch.level0 {width: 20px; height:20px}
+.sidebar .ztree li span.button.switch.level1 {width: 20px; height:20px}
+.sidebar .ztree li span.button.noline_open {background-position: 0 0;}
+.sidebar .ztree li span.button.noline_close {background-position: -18px 0;}
+.sidebar .ztree li span.button.noline_open.level0 {background-position: 0 -18px;}
+.sidebar .ztree li span.button.noline_close.level0 {background-position: -18px -18px;}
+.sidebar .ztree li span.button.noline_docu{ background:none;}

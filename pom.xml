@@ -1,0 +1,346 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.cn</groupId>
+	<artifactId>manager</artifactId>
+	<packaging>war</packaging>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>manager Maven Webapp</name>
+	<url>http://maven.apache.org</url>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<jetty.version>6.1.4</jetty.version>
+		<spring.version>4.3.3.RELEASE</spring.version>
+		<slf4j.version>1.5.10</slf4j.version>
+		<java.version>1.6</java.version>
+		<junit.version>4.12</junit.version>
+		<mybatis.version>3.3.0</mybatis.version>
+		<shiro.version>1.2.2</shiro.version>
+		<jackson.version>2.5.3</jackson.version>
+	</properties>
+
+	<dependencies>
+
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junit.version}</version>
+		</dependency>
+		<!-- Spring -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-expression</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-beans</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context-support</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-oxm</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jdbc</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-tx</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-aop</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+
+		<!-- mybatis -->
+		<dependency>
+			<groupId>org.mybatis</groupId>
+			<artifactId>mybatis</artifactId>
+			<version>${mybatis.version}</version>
+		</dependency>
+
+		<!-- mybatis spring -->
+		<dependency>
+			<groupId>org.mybatis</groupId>
+			<artifactId>mybatis-spring</artifactId>
+			<version>1.2.3</version>
+		</dependency>
+
+		<!-- mysql连接 -->
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>5.1.18</version>
+		</dependency>
+
+		<!-- logback -->
+		<!-- 用来记录spring的日志，类似于桥接模式 ，用来替换 commons-logging，commons-logging会在spring其他jar中自动引入 -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jcl-over-slf4j</artifactId>
+			<version>1.7.5</version>
+		</dependency>
+
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-core</artifactId>
+			<version>1.1.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>1.1.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-collections</groupId>
+			<artifactId>commons-collections</artifactId>
+			<version>3.2.1</version>
+		</dependency>
+
+		
+		<!-- alibaba druid database -->
+		<!-- https://mvnrepository.com/artifact/com.alibaba/druid -->
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>druid</artifactId>
+			<version>1.0.26</version>
+		</dependency>
+
+		<!-- shiro begin -->
+		<dependency>
+			<groupId>org.apache.shiro</groupId>
+			<artifactId>shiro-core</artifactId>
+			<version>${shiro.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.shiro</groupId>
+			<artifactId>shiro-web</artifactId>
+			<version>${shiro.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.shiro</groupId>
+			<artifactId>shiro-ehcache</artifactId>
+			<version>${shiro.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.shiro</groupId>
+			<artifactId>shiro-quartz</artifactId>
+			<version>${shiro.version}</version>
+			<!-- 排除依赖 -->
+			<!-- <exclusions> <exclusion> <groupId>org.opensymphony.quartz</groupId> 
+				<artifactId>quartz</artifactId> <version>1.6.1</version> </exclusion> </exclusions> -->
+		</dependency>
+		<dependency>
+			<groupId>org.apache.shiro</groupId>
+			<artifactId>shiro-spring</artifactId>
+			<version>${shiro.version}</version>
+		</dependency>
+		<!-- shiro end -->
+		<!-- javax.servlet-api -->
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>3.1.0</version>
+			<scope>provided</scope>
+
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet.jsp</groupId>
+			<artifactId>jsp-api</artifactId>
+			<version>2.0</version>
+			<scope>provided</scope>
+
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/javax.servlet/jsp-api -->
+
+		<!-- 标签库 -->
+		<dependency>
+			<groupId>jstl</groupId>
+			<artifactId>jstl</artifactId>
+			<version>1.2</version>
+		</dependency>
+		<dependency>
+			<groupId>taglibs</groupId>
+			<artifactId>standard</artifactId>
+			<version>1.1.2</version>
+		</dependency>
+		<!-- 标签库 -->
+		<dependency>
+			<groupId>cglib</groupId>
+			<artifactId>cglib</artifactId>
+			<version>2.2.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>net.sf.ehcache</groupId>
+			<artifactId>ehcache-core</artifactId>
+			<version>2.6.11</version>
+		</dependency>
+
+		<!-- siteMesh -->
+		<!-- https://mvnrepository.com/artifact/opensymphony/sitemesh -->
+		<!-- <dependency> <groupId>opensymphony</groupId> <artifactId>sitemesh</artifactId> 
+			<version>2.4.2</version> </dependency> -->
+
+		<dependency>
+			<groupId>org.sitemesh</groupId>
+			<artifactId>sitemesh</artifactId>
+			<version>3.0.1</version>
+		</dependency>
+
+		<!-- jackson -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>${jackson.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.module</groupId>
+			<artifactId>jackson-module-jaxb-annotations</artifactId>
+			<version>${jackson.version}</version>
+		</dependency>
+
+		<!-- 文件上传 -->
+		<dependency>
+			<groupId>commons-fileupload</groupId>
+			<artifactId>commons-fileupload</artifactId>
+			<version>1.3.2</version>
+		</dependency>
+		<!-- 分页插件 -->
+		<!-- <dependency> <groupId>com.github.pagehelper</groupId> <artifactId>pagehelper</artifactId> 
+			<version>4.1.6</version> </dependency> -->
+
+		<!-- <dependency> <groupId>org.quartz-scheduler</groupId> <artifactId>quartz</artifactId> 
+			<version>2.2.3</version> </dependency> -->
+
+		<!-- aspect -->
+		<!-- https://mvnrepository.com/artifact/org.aspectj/aspectjrt -->
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjrt</artifactId>
+			<version>1.8.9</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.aspectj/aspectjweaver -->
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjweaver</artifactId>
+			<version>1.8.9</version>
+		</dependency>
+		
+		<!-- 引入非maven仓库管理的jar -->
+		<dependency>
+			<groupId>pageHelper</groupId>
+			<artifactId>pageHelper</artifactId>
+			<version>1.0</version>
+			<scope>system</scope>
+			<systemPath>${basedir}/src/main/webapp/WEB-INF/lib/pagehelper-4.1.6.jar</systemPath>
+		</dependency>
+		
+		<dependency>
+			<groupId>jsqlparser</groupId>
+			<artifactId>jsqlparser</artifactId>
+			<version>1.0</version>
+			<scope>system</scope>
+			<systemPath>${basedir}/src/main/webapp/WEB-INF/lib/jsqlparser-0.9.5.jar</systemPath>
+		</dependency>
+
+		<!-- logback 发送错误ERROR级别邮件 依赖包-->
+		<dependency>
+			<groupId>javax.mail</groupId>
+			<artifactId>mail</artifactId>
+			<version>1.4.7</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.activation</groupId>
+			<artifactId>activation</artifactId>
+			<version>1.1.1</version>
+		</dependency>
+
+		<!--spring rabbmitmq-->
+		<dependency>
+			<groupId>org.springframework.amqp</groupId>
+			<artifactId>spring-rabbit</artifactId>
+			<version>1.7.0.RELEASE</version>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.validation</groupId>
+			<artifactId>validation-api</artifactId>
+			<version>1.1.0.Final</version>
+		</dependency>
+	
+	</dependencies>
+	  <build>
+    <finalName>labor</finalName>
+    <plugins>
+      <!-- tomcat 插件,命令： mvn tomcat:run-->
+      <plugin>
+        <groupId>org.apache.tomcat.maven</groupId>
+        <artifactId>tomcat7-maven-plugin</artifactId>
+        <version>2.1</version>
+        <configuration>
+          <port>8080</port>
+          <path>/labor</path>
+          <uriEncoding>UTF-8</uriEncoding>
+          <finalName>labor</finalName>
+          <server>tomcat7</server>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>1.7</source>
+          <target>1.7</target>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>
