@@ -51,13 +51,13 @@
       <div class="modal-body">
         <form id="addUserForm" data-parsley-validate class="form-horizontal form-label-left">
 		  <div class="form-group">
-              <label class=""><span style="color:red">*</span>下载模板：</label>
+<!--               <label class=""><span style="color:red">*</span>下载模板：</label> -->
               <div class="col-md-8 col-sm-4 col-xs-12">
                   <a onclick="downLoadTemplet()">点击下载模板</a>
               </div>
           </div>
 	     <div class="form-group">
-	         <label class=""><span class="setcolordd">*</span>excel文件：</label>
+<!-- 	         <label class=""><span class="setcolordd">*</span>excel文件：</label> -->
 	         <div class="col-md-8 col-sm-4 col-xs-12">
 	              <a href="javascript:;" class="a-upload">
 		    		<input type="file" name="file" id="importFile">
@@ -142,7 +142,7 @@
 		                                <i class="icon-search"></i> 删除
 		                            </button>
 		                            <button id="btn-search-export" class="btn btn-primary btn-sm">
-		                                <i class="icon-search"></i> 导出
+		                                <i class="icon-search"></i> 批量导出
 		                            </button>
 		                            <button id="btn-search-import" class="btn btn-primary btn-sm">
 		                                <i class="icon-search"></i> 批量导入
@@ -448,7 +448,7 @@
     });
     
     //下载模板
-    $scope.downLoadTemplet = function () {
+    function downLoadTemplet() {
         location.href = "/download/用户信息导入模板.xls";
     }
 </script>
