@@ -74,7 +74,7 @@
         <!-- /page content -->
         <footer>
             <div class="pull-right">
-                <a href="javascript:void(0);">贵州威宁经济开发区物业管理有限公司劳务派遣信息管理系统</a>	
+<!--                 <a href="javascript:void(0);">贵州威宁经济开发区物业管理有限公司劳务派遣信息管理系统</a>	 -->
             </div>
             <div class="clearfix"></div>
         </footer>

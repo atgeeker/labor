@@ -41,6 +41,39 @@
   </div>
 </div>
 
+<div class="modal fade" id="userImportExcelModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="closeBtn();"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">用户信息批量导入</h4>
+      </div>
+      <div class="modal-body">
+        <form id="addUserForm" data-parsley-validate class="form-horizontal form-label-left">
+		  <div class="form-group">
+              <label class=""><span style="color:red">*</span>下载模板：</label>
+              <div class="col-md-8 col-sm-4 col-xs-12">
+                  <a onclick="downLoadTemplet()">点击下载模板</a>
+              </div>
+          </div>
+	     <div class="form-group">
+	         <label class=""><span class="setcolordd">*</span>excel文件：</label>
+	         <div class="col-md-8 col-sm-4 col-xs-12">
+	              <a href="javascript:;" class="a-upload">
+		    		<input type="file" name="file" id="importFile">
+				  </a>
+	         </div>
+	     </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-default" data-dismiss="modal" onclick="closeBtn();">关闭</button>
+	        <button type="button" class="btn btn-primary" id="user_save_excel_btn">保存</button>
+	      </div>
+		</form>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- 修改用户模态框 -->
 <div class="modal fade" id="userEditModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
   <div class="modal-dialog" role="document">
@@ -85,6 +118,7 @@
                         <li><a href="#"><i class="icon-home"></i> 首页</a></li>
                         <li><a href="#">用户管理</a></li>
                     </ol>
+<!--                     <form id="searchform"> -->
                     <div role="form" id="search_form_mytask" class="form-horizontal" style="float: left;width:60%;">
                         <div id="simpleSearchLabel">
                             <div class="form-group">
@@ -107,11 +141,18 @@
 		                            <button id="btn-search-del" class="btn btn-danger btn-sm">
 		                                <i class="icon-search"></i> 删除
 		                            </button>
+		                            <button id="btn-search-export" class="btn btn-primary btn-sm">
+		                                <i class="icon-search"></i> 导出
+		                            </button>
+		                            <button id="btn-search-import" class="btn btn-primary btn-sm">
+		                                <i class="icon-search"></i> 批量导入
+		                            </button>
 		                        </shiro:hasAnyRoles>
 		                        	&nbsp;&nbsp;<strong>当前在职人数:</strong>&nbsp; ${countEntry}
                             </div>
                         </div>
                     </div>
+<!--                     </form> -->
                     <!-- <div id="batch-toolbar">
                     </div> -->
                     <table id="queryUserTable"></table>
@@ -383,6 +424,33 @@
 		$("#edit_username").val(""); 
 	}
     
+    //导出
+    $("#btn-search-export").on('click',function(){
+    	BootstrapDialog.confirm({
+            title: '文件导出',
+            message: '导出用户信息到Excel?',
+            btnCancelLabel:'取消',
+            btnOKLabel:'确认',
+            callback: function (result) {
+                if (result) {
+                	location.href= "${contextPath}/manuser/exportUserExcel?" + $("#s_eusername").serialize();
+            	}
+        	}
+    	});
+    });
+    
+    //批量导入
+    $("#btn-search-import").click(function () {
+    	//弹出模态框
+		$("#userImportExcelModal").modal({
+			backdrop:"static"
+		});
+    });
+    
+    //下载模板
+    $scope.downLoadTemplet = function () {
+        location.href = "/download/用户信息导入模板.xls";
+    }
 </script>
 </body>
 </html>

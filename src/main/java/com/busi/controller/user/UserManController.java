@@ -1,7 +1,15 @@
 package com.busi.controller.user;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -14,6 +22,7 @@ import com.busi.controller.ReturnData;
 import com.busi.service.EntryService;
 import com.busi.service.UserService;
 import com.busi.util.SystemUtil;
+import com.busi.util.excelutil.ExcelUtil;
 import com.core.shiro.util.CreatePasswordUtil;
 
 import org.apache.shiro.SecurityUtils;
@@ -37,6 +46,7 @@ import com.busi.domain.EntryExample;
 import com.busi.domain.User;
 import com.busi.domain.UserExample;
 import com.busi.domain.UserExample.Criteria;
+import com.busi.domain.vo.UserVo;
 import com.busi.log.LOG;
 import com.busi.mapper.UserMapper;
 import com.busi.util.StringUtils;
@@ -219,6 +229,71 @@ public class UserManController extends BaseController {
         map.put("total", page.getTotal());
         map.put("rows", page);
         return map;
+    }
+    
+    /**
+     * 导出用户信息
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "/exportUserExcel", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequiresRoles("admin")
+    @ResponseBody
+    public void exportUserExcel(HttpServletRequest request, HttpServletResponse response,
+    		ModelMap model) {
+    	try {
+	    	String username = request.getParameter("username");
+	    	List<UserVo> userList = new ArrayList<>();
+	    	UserExample example = new UserExample();
+	    	Criteria criteria = example.createCriteria();
+	    	if (!StringUtils.isEmpty(username)) {
+	    		criteria.andUsernameLike("%" + username + "%");
+	    	}
+	    	//查询用户列表
+	    	userList = userMapper.exportUserExcel(example);
+	    	if(userList != null && userList.size() > 0) {
+				OutputStream out = null;
+				try {
+					String path = request.getRealPath("") + "//userExcel//tempPath//";
+					File file = new File(path);// 导出文件存放的位置
+					if (!file.exists()) {
+						file.mkdirs();
+					}
+					String name = new String("user.xls".getBytes(), "ISO8859-1");
+					out = new FileOutputStream(path + name);
+					ExcelUtil<UserVo> util = new ExcelUtil<UserVo>(UserVo.class);
+					util.exportExcel(userList, name, 60000, out);
+					File file1 = new File(path + name);
+					// 以流的形式下载文件。
+					InputStream fis = new BufferedInputStream(new FileInputStream(path + name));
+					byte[] buffer = new byte[fis.available()];
+					fis.read(buffer);
+					fis.close();
+					// 清空response
+					response.reset();
+					// 设置response的Header
+					response.addHeader("Content-Disposition", "attachment;filename=" + new String("用户信息".getBytes("UTF-8"), "ISO8859-1")+".xls");
+					response.addHeader("Content-Length", "" + file1.length());
+					OutputStream toClient = new BufferedOutputStream(response.getOutputStream());
+					response.setContentType("application/vnd.ms-excel;charset=utf-8");
+					toClient.write(buffer);
+					toClient.flush();
+					toClient.close();
+					if (file1.exists()) {
+						file1.delete();
+					}
+				} catch (Exception e) {
+					log.error(e.getMessage(),e);
+				}finally{
+					out.close();
+				}
+			}
+    	} catch (Exception e) {
+			log.error(e.getMessage(),e);
+		}
+    	
     }
 
     @RequestMapping("/loadupload")

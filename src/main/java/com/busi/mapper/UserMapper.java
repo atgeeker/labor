@@ -2,6 +2,8 @@ package com.busi.mapper;
 
 import com.busi.domain.User;
 import com.busi.domain.UserExample;
+import com.busi.domain.vo.UserVo;
+
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
@@ -22,6 +24,8 @@ public interface UserMapper {
     int insertSelective(User record);
 
     List<User> selectByExample(UserExample example);
+    
+    List<UserVo> exportUserExcel(UserExample example);
 
     User selectByPrimaryKey(Long id);
 

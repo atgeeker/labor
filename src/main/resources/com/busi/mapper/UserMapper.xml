@@ -85,6 +85,20 @@
       order by ${orderByClause}
     </if>
   </select>
+  <select id="exportUserExcel" parameterType="com.busi.domain.UserExample" resultType="com.busi.domain.vo.UserVo">
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from user
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
     <include refid="Base_Column_List" />
